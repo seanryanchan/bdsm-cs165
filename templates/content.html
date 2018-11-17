@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Content</h1>
+  <ul class="list-group">
+  {% for x in content %}
+    <li class="list-group-item">{{x.title}}
+  {% endfor %}
+{% endblock %}
