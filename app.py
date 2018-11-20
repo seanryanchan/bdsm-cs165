@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from data import Content
+from flask import url_for
 
 app = Flask(__name__)
 
@@ -16,6 +17,7 @@ def about():
 @app.route('/content')
 def content():
     return render_template('content.html', content = Content)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
