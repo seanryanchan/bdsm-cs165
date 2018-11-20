@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Album Name: {{ content.albumname }}</h1>
+    <div class="editableSectionA">
+        <p>OST ID: {{content.ostid}}</p>
+        <p>Album Name: {{content.albumname}}</p>
+        <p>Genre: {{content.genre}}</p>
+        <p>Year: {{content.year}}</p>
+    </div>
+    <div class="editableSectionB">
+        <form class="" action="" method="post">
+            <p>OST ID: {{content.ostid}}</p>
+            <p>Album Name: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content.albumname}}"></p>
+            <p>Genre: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content.genre}}"></p>
+            <p>Year: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content.year}}"></p>
+        </form>
+    </div>
+    <div class="editableSectionA">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-warning">Edit This OST</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-danger">Cancel</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-success">Save Changes</button>
+    </div>
+{% endblock %}

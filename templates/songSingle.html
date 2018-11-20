@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Song: {{ content.songname }}</h1>
+    <div class="editableSectionA">
+        <p>SongID: {{content.songid}}</p>
+        <p>Song Name: {{content.songname}}</p>
+        <p>Artist: {{content.artist}}</p>
+    </div>
+    <div class="editableSectionB">
+        <form class="" action="" method="post">
+            <p>SongID: {{content.songid}}</p>
+            <p>Song Name: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content.songname}}"></p>
+            <p>Artist: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content.artist}}"></p>
+        </form>
+    </div>
+    <div class="editableSectionA">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-warning">Edit This Song</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-danger">Cancel</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-success">Save Changes</button>
+    </div>
+{% endblock %}
