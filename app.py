@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from data import Content
 from flask import url_for
 import sqlite3
@@ -28,6 +28,9 @@ def getConnection():
         return render_template('errorConnectionDatabase.html')
     else:
         return conn
+def getCursor(conn, rowFactory=sqlite3.Row):
+    conn.row_factory = rowFactory
+    return conn.cursor()
 
 def getAllRows(tableName):
     conn = getConnection()
@@ -55,6 +58,9 @@ def getRow(rowID, tableName):
     row = cursor.fetchone()
     cursor.close()
     return row;
+def getRowsNatJoin(tableName):
+    pass
+
 
 @app.route('/songs/')
 def browseAllSongs():
@@ -63,10 +69,21 @@ def browseAllSongs():
 
 @app.route('/songs/<int:songID>/')
 def browseSongSingle(songID):
-    row = getRow(songID, "Song")
-    return render_template('songSingle.html',content=row)
+    song = getRow(songID, "Song")
+    conn = getConnection()
+    conn.row_factory=sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("select * from PlayedIn p, ost o where p.ostid=o.ostid and p.songid=?", str(songID))
+    playedin = cursor.fetchall()
+    cursor.close()
+    data = {"song": song, "playedin": playedin}
+    return render_template('songSingle.html',content=data)
+@app.route('/songs/<int:songID>/addOST/')
 
-# todo: show natural joins of Song & OST & Movies
+def addOSTtoSong(songID):
+    data={"song": getRow(songID,"Song"), "ost": getAllRows("OST")}
+    return render_template('song_OSTtoSong.html', content=data)
+
 # implement edit commit changes function
 
 @app.route('/OST/')
@@ -76,8 +93,15 @@ def browseAllOST():
 
 @app.route('/OST/<int:ostID>/')
 def browseOSTSingle(ostID):
-    row = getRow(ostID, "OST")
-    return render_template('OSTSingle.html',content=row)
+    ost = getRow(ostID, "OST")
+    conn = getConnection()
+    conn.row_factory=sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("select * from FeaturedIn f, MovieInfo m where f.movieid=m.movieid and f.ostid=?", str(ostID))
+    featuredIn = cursor.fetchall()
+    cursor.close()
+    data = {"ost": ost, "featuredIn": featuredIn}
+    return render_template('OSTSingle.html',content=data)
 
 
 

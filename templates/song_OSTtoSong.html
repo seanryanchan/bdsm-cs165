@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>You are now adding an OST to the song {{content["song"].songname}}</h1>
+    <h1>List of OST:</h1>
+    <table class="table table-hover">
+        <thead>
+            <th>OST ID</th>
+            <th>OST Album Name</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Action</th>
+        </thead>
+        <tbody href="">
+            {% for r in content["ost"] %}
+                <tr>
+                    <td>{{ r.ostid }}</td>
+                    <td>{{r.albumname}}</td>
+                    <td>{{r.genre}}</td>
+                    <td>{{r.year}}</td>
+                    <td><button type="button" name="view" class="btn btn-link"><a href="/OST/{{r.ostid}}/">Add!</a></button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
