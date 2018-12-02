@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>OST</h1>
+    <table class="table table-hover">
+        <thead>
+            <th>OST ID</th>
+            <th>OST Album Name</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Action</th>
+        </thead>
+        <tbody href="">
+            {% for x in content %}
+                <tr>
+                    <td>{{ x.ostid }}</td>
+                    <td>{{x.albumname}}</td>
+                    <td>{{x.genre}}</td>
+                    <td>{{x.year}}</td>
+                    <td><button type="button" name="view" class="btn btn-link"><a href="/OST/{{x.ostid}}/">View!</a></button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
