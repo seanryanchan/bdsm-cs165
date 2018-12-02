@@ -8,10 +8,13 @@
         <p>Artist: {{content["song"].artist}}</p>
     </div>
     <div class="editableSectionB">
-        <form class="" action="" method="post">
+        <form class="" action="/songs/{{content['song'].songid}}/update/" method="POST">
             <p>SongID: {{content["song"].songid}}</p>
-            <p>Song Name: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content["song"].songname}}"></p>
-            <p>Artist: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content["song"].artist}}"></p>
+            <p>Song Name: <input style="min-width: 300px"class="control-form"type="text" name="newSongName" value="{{content['song'].songname}}"></p>
+            <p>Artist: <input style="min-width: 300px"class="control-form"type="text" name="newArtist" value="{{content['song'].artist}}"></p>
+            <div class="editableSectionB">
+                <button type="submit" name="button" class="btn btn-success">Save Changes</button>
+            </div>
         </form>
     </div>
     <div class="editableSectionA">
@@ -19,9 +22,6 @@
     </div>
     <div class="editableSectionB">
         <button onclick="toggleEdit()" type="button" name="button" class="btn btn-danger">Cancel</button>
-    </div>
-    <div class="editableSectionB">
-        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-success">Save Changes</button>
     </div>
     <h2>{{content["song"].songname}} has been played in the following OST:</h2>
     <table class="table table-hover">
