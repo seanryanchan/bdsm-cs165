@@ -46,7 +46,11 @@
                 <td>{{r.albumName}}</td>
                 <td>{{r.genre}}</td>
                 <td>{{r.year}}</td>
-                <td><button type="button" name="view" class="btn btn-danger"><a href="/songs/{{content['song'].songid}}/deleteOST/{{r.ostid}}">Delete</a></button></td>
+                <td>
+                    <form class="" action="/songs/{{content['song'].songid}}/deleteOST/{{r.ostid}}" method="POST">
+                        <button type="submit" name="button" value="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

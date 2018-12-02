@@ -101,7 +101,8 @@ def updateSong(songID):
     newArtist = request.form["newArtist"]
     conn = getConnection()
     cursor = getCursor(conn)
-    cursor.execute("update Song set SongName='%s', Artist='%s' where SongID=?" % (newSongName, newArtist), str(songID))
+    cursor.execute("update Song set SongName=?, Artist=? where SongID=?", (newSongName, newArtist, str(songID)))
+    printSQLStmt("update Song set SongName=%s, Artist=%s where SongID=%s"% (newSongName, newArtist, str(songID)))
     conn.commit()
     cursor.close()
     conn.close()
@@ -130,6 +131,17 @@ def song_addPlayedIn_add(songID, ostID):
     cursor.close()
     conn.close()
     return redirect("/songs/%s/" % str(songID), code=302)
+
+@app.route("/songs/<int:songID>/deleteOST/<int:ostID>", methods=["POST"])
+def song_deletePlayedIn(songID,ostID):
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute("delete from PlayedIn where ostID=? and songID=?", (str(ostID), str(songID)))
+    printSQLStmt("delete from PlayedIn where ostID=%s and songID=%s" % (str(ostID), str(songID)))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect("/songs/%s/" % str(songID))
 
 # FOR THE "OST" PAGES
 
