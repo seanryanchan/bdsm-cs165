@@ -2,8 +2,16 @@ from flask import Flask, render_template, request, redirect
 from data import Content
 from flask import url_for
 import sqlite3
+from werkzeug.routing import BaseConverter
 
 app = Flask(__name__)
+
+class RegexConverter(BaseConverter):
+        def __init__(self, url_map, *items):
+                super(RegexConverter, self).__init__(url_map)
+                self.regex = items[0]
+
+app.url_map.converters['regex'] = RegexConverter
 
 Content = Content()
 
@@ -35,9 +43,9 @@ def getCursor(conn, rowFactory=sqlite3.Row):
 
 def getAllRows(tableName):
     conn = getConnection()
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    cursor = getCursor(conn)
     cursor.execute("select * from '%s'" % tableName)
+    printSQLStmt("select * from '%s'" %tableName)
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -66,7 +74,7 @@ def getRow(rowID, tableName):
     conn.close()
     return row;
 
-def getRowsNatJoin(tableName, commonAttr, attrLookup, attrLookupValue):
+def getRowsNatJoin(tableNameA, tableNameB, commonAttr, attrLookup, attrLookupValue):
     pass
 
 def printSQLStmt(stmt):
@@ -79,12 +87,10 @@ def printSQLStmt(stmt):
 
 @app.route('/songs/')
 def browseAllSongs():
-    rows = getAllRows("Song")
-    return render_template('songs.html',content=rows)
+    return render_template('songs.html',content=getAllRows("Song"))
 
 @app.route('/songs/<int:songID>/')
 def browseSongSingle(songID):
-    song = getRow(songID, "Song")
     conn = getConnection()
     cursor = getCursor(conn)
     cursor.execute("select * from PlayedIn p, ost o where p.ostid=o.ostid and p.songid=?", str(songID))
@@ -92,7 +98,7 @@ def browseSongSingle(songID):
     playedin = cursor.fetchall()
     cursor.close()
     conn.close()
-    data = {"song": song, "playedin": playedin}
+    data = {"song": getRow(songID, "Song"), "playedin": playedin}
     return render_template('songSingle.html',content=data)
 
 @app.route('/songs/<int:songID>/update/', methods=["POST"])
@@ -147,12 +153,10 @@ def song_deletePlayedIn(songID,ostID):
 
 @app.route('/OST/')
 def browseAllOST():
-    rows = getAllRows("OST")
-    return render_template("OST.html", content=rows)
+    return render_template("OST.html", content=getAllRows("OST"))
 
-@app.route('/OST/<int:ostID>/')
+@app.route("/OST/<int:ostID>/")
 def browseOSTSingle(ostID):
-    ost = getRow(ostID, "OST")
     conn = getConnection()
     cursor = getCursor(conn)
     cursor.execute("select * from FeaturedIn f, MovieInfo m where f.movieid=m.movieid and f.ostid=?", str(ostID))
@@ -160,8 +164,12 @@ def browseOSTSingle(ostID):
     featuredIn = cursor.fetchall()
     cursor.close()
     conn.close()
-    data = {"ost": ost, "featuredIn": featuredIn}
+    data = {"ost": getRow(ostID, "OST"), "featuredIn": featuredIn}
     return render_template('OSTSingle.html',content=data)
+
+@app.route('/people/<int:personID>/')
+def browsePersonSingle(personID):
+    pass
 
 
 
