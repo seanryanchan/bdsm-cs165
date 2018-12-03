@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>{{content["PersonInfo"].Name}}</h1>
+  <div class="editableSectionA">
+    <p>Person ID: {{content["PersonInfo"].PersonID}}</p>
+    <p>Name: {{content['PersonInfo'].Name}}</p>
+    <p>Gender: {{content["PersonInfo"].Gender}}</p>
+  </div>
+  <div class="editableSectionB">
+    <form class="" action="/Persons/{{content['PersonInfo'].PersonID}}/Update/" method="POST">
+      <p>PersonID: {{content['PersonInfo'].PersonID}}</p>
+      <p>Name: <input style="min-width:300px" class="control-form" type="text" name="newName" value="{{content['PersonInfo'].Name}}/"></p>
+      <p>Gender: <input style="min-width:300px" class="control-form" type="text" name="newGender" value="{{content['PersonInfo'].Gender}}"></p>
+      <div class="editableSectionB">
+        <button type="submit" name="button" class="btn btn-success">Save Changes</button>
+      </div>
+    </form>
+  </div>
+  <div class="editableSectionA">
+    <button onclick="toggleEdit()" type="button" name="button" class="btn btn-warning">Edit This Person</button>
+  </div>
+  <div class="editableSectionB">
+    <button ondblclick="toggleEdit()" type="button" name="button" class="btn btn-danger">Cancel</button>
+  </div>
+
+  <h2>{{content['PersonInfo'].Name}} has directed the following movies:</h2>
+  <table class="table table-hover">
+    <thead>
+      <th>Movie ID</th>
+      <th>Title</th>
+      <th>Premise</th>
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Length</th>
+      <th>Action</th>
+    </thead>
+    <tbody>
+      {% for d in content['Directed'] %}
+      <tr>
+        <td>{{d.MovieID}}</td>
+        <td>{{d.Title}}</td>
+        <td>{{d.Premise}}</td>
+        <td>{{d.Genre}}</td>
+        <td>{{d.Year}}</td>
+        <td>{{d.Length}}</td>
+        <td>
+          <form class="" action="/Persons/{{content['PersonInfo'].PersonID}}/DeleteDirectedMovie/{{d.MovieID}}/" method="POST">
+            <button type="submit" name="button" value="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </td>
+      {% endfor %}
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td><button type="button" class="btn btn"><a href="/Persons/{{content['PersonInfo'].PersonID}}/AddDirectedMovie/">Add Another Movie</a></button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>{{content['PersonInfo'].Name}} has acted in the following movies:</h2>
+  <table class="table table-hover">
+    <thead>
+      <th>Movie ID</th>
+      <th>Title</th>
+      <th>Premise</th>
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Length</th>
+      <th>Action</th>
+    </thead>
+    <tbody>
+      {% for a in content['ActedIn'] %}
+      <tr>
+        <td>{{a.MovieID}}</td>
+        <td>{{a.Title}}</td>
+        <td>{{a.Premise}}</td>
+        <td>{{a.Genre}}</td>
+        <td>{{a.Year}}</td>
+        <td>{{a.Length}}</td>
+        <td>
+          <form class="" action="/Persons/{{content['PersonInfo'].PersonID}}/DeleteActedMovie/{{a.MovieID}}/" method="POST">
+            <button type="submit" name="button" value="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td><button type="button" class="btn btn"><a href="/Persons/{{content['PersonInfo'].PersonID}}/AddActedMovie/">Add Another Movie</a></button></td>
+    </tbody>
+  </table>
+{% endblock %}
