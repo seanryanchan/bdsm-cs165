@@ -171,8 +171,79 @@ def browseOSTSingle(ostID):
 def browsePersonSingle(personID):
     pass
 
+# FOR THE "MOVIES" PAGES
+# List of All Movies
+@app.route('/movies/')
+def browseAllMovies():
+    rows = getAllRows("MovieInfo")
+    return render_template('movies.html',content=rows)
 
+# Info about a Specific Movie
+@app.route('/movies/<int:movieID>/')
+def browseMoviesSingle(movieID):
+    movie = getRow(movieID, "MovieInfo")
+    data = {"movie": movie}
+    return render_template('moviesSingle.html',content=data)
 
+# Update the info of a MOVIES
+@app.route('/movies/<int:movieID>/update/', methods=["POST"])
+def updateMovie(movieID):
+    newTitle = request.form["newTitle"]
+    newPremise = request.form["newPremise"]
+    newGenre = request.form["newGenre"]
+    newYear = request.form["newYear"]
+    newLength = request.form["newLength"]
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute("update MovieInfo set Title=?, Premise=?, Genre=?, Year=?, Length=? where MovieID=?", (newTitle, newPremise, newGenre, newYear, newLength, str(movieID)))
+    printSQLStmt("update MovieInfo set Title=%s, Premise=%s, Genre=%s, Year=%s, Length=%s where MovieID=%s"% (newTitle, newPremise, newGenre, newYear, newLength, str(movieID)))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect("/movies/%s/" %str(movieID))
+
+# Create a new Movie
+# Page to Redirect Users to Add Function
+@app.route('/movies/newMovie/')
+def newMovie():
+    return render_template('newMovie.html')
+# Getting info for new movie
+@app.route('/movies/newMovie/submit/', methods=["POST"])
+def addMovie():
+    addTitle = request.form["addTitle"]
+    addPremise = request.form["addPremise"]
+    addGenre = request.form["addGenre"]
+    addYear = request.form["addYear"]
+    addLength = request.form["addLength"]
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute("select max(movieID) from MovieInfo")
+    maxMovieID = cursor.fetchone()[0]
+    addMovieID = int(maxMovieID)+1
+    try:
+        cursor.execute("insert into MovieInfo values (?,?,?,?,?,?)", (addMovieID,addTitle,addPremise,addGenre,addYear,addLength))
+        printSQLStmt("insert into MovieInfo values (%s,%s,%s,%s,%s,%s)" % (addMovieID,addTitle,addPremise,addGenre,addYear,addLength))
+    except sqlite3.IntegrityError as e:
+        cursor.close()
+        conn.close()
+        print(e)
+        return redirect("/movies/", code=302)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect("/movies/", code=302)
+
+# Delete a Movie
+@app.route("/movies/<int:movieID>/deleteMovie/", methods=["POST"])
+def deleteMovie(movieID):
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute("delete from MovieInfo where MovieID=?", (str(movieID)))
+    printSQLStmt("delete from MovieInfo where MovieID=%s" % (str(movieID)))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect("/movies/")
 
 if __name__ == '__main__':
     app.run(debug=True)

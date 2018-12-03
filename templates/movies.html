@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Movies  </h1>
+    <table class="table table-hover">
+        <thead>
+            <th>Movie ID</th>
+            <th>Title</th>
+            <th>Premise</th>
+            <th>Year</th>
+        </thead>
+        <tbody href="">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button type="button" name="view" class="btn btn-link"><a href="/movies/newMovie/">Add Another Movie</a></button></td>
+            </tr>
+            {% for x in content %}
+            <tr>
+                <td>{{x.MovieID }}</td>
+                <td>{{x.Title}}</td>
+                <td>{{x.Premise}}</td>
+                <td>{{x.Year}}</td>
+                <td><button type="button" name="view" class="btn btn-link"><a href="/movies/{{x.movieid}}/">View!</a></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
