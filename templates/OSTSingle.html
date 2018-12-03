@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Album Name: {{ content['ost'].albumname }}</h1>
+    <div class="editableSectionA">
+        <p>OST ID: {{content['ost'].ostid}}</p>
+        <p>Album Name: {{content['ost'].albumname}}</p>
+        <p>Genre: {{content['ost'].genre}}</p>
+        <p>Year: {{content['ost'].year}}</p>
+    </div>
+    <div class="editableSectionB">
+        <form class="" action="" method="post">
+            <p>OST ID: {{content['ost'].ostid}}</p>
+            <p>Album Name: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content['ost'].albumname}}"></p>
+            <p>Genre: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content['ost'].genre}}"></p>
+            <p>Year: <input style="min-width: 300px"class="control-form"type="text" name="" value="{{content['ost'].year}}"></p>
+        </form>
+    </div>
+    <div class="editableSectionA">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-warning">Edit This OST</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-danger">Cancel</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-success">Save Changes</button>
+    </div>
+    <h2>{{content["ost"].albumname}} has been featured in the following movies:</h2>
+    <table class="table table-hover">
+        <thead>
+            <th>Movie ID</th>
+            <th>Title</th>
+            <th>Premise</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Length</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button type="button" name="view" class="btn btn-link"><a href="/OST/{{content['ost'].ostid}}/addMovie">Add Another Movie</a></button></td>
+            </tr>
+            {% for r in content["featuredIn"] %}
+            <tr>
+                <td>{{ r.movieID }}</td>
+                <td>{{r.title}}</td>
+                <td>{{r.premise[:50] + "..."}}</td>
+                <td>{{r.genre}}</td>
+                <td>{{r.year}}</td>
+                <td>{{r.length}}</td>
+                <td><button type="button" name="view" class="btn btn-danger"><a href="/OST/{{content['ost'].ostid}}/deleteMovie/{{r.ostid}}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

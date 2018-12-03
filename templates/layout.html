@@ -5,6 +5,8 @@
     <title>BDSM</title>
     <!--  Sean - this makes bootstrap run locally. -->
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <!-- Sean - our helper css will go here  -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='misc.css') }}">
   </head>
   <body>
     {% include 'includes/_navbar.html' %}
@@ -14,5 +16,9 @@
 
     <!--  Sean - this makes bootstrap run locally. -->
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <!-- Sean - our helper js functions will go here  -->
+    <script src="{{ url_for('static', filename='helper.js') }}"></script>
+    <!-- Sean - jquery  -->
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
   </body>
 </html>

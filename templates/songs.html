@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Songs</h1>
+    <table class="table table-hover">
+        <thead>
+            <th>Song ID</th>
+            <th>Song Name</th>
+            <th>Artist Name</th>
+            <th>Action</th>
+        </thead>
+        <tbody href="">
+            {% for x in content %}
+                <tr>
+                    <td>{{ x.songid }}</td>
+                    <td>{{x.songname}}</td>
+                    <td>{{x.artist}}</td>
+                    <td><button type="button" name="view" class="btn btn-link"><a href="/songs/{{x.songid}}/">View!</a></button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -39,22 +39,22 @@ CREATE TABLE PersonInfo(
 
 CREATE TABLE OST(
 	OSTID		varchar(5),
-	AlbumName	varchar(20), 
-	Genre 		varchar(20), 
+	AlbumName	varchar(20),
+	Genre 		varchar(20),
 	Year 		varchar(5),
-	primary key (OSTID)	
+	primary key (OSTID)
 );
 
 CREATE TABLE Song(
 	SongID		varchar(5),
-	SongName 	varchar(20), 
+	SongName 	varchar(20),
 	Artist		varchar (20),
 	primary key (SongID)
 );
 
 CREATE TABLE UserReview(
 	UserRevID 	varchar(5),
-	UserName	varchar(20), 
+	UserName	varchar(20),
 	Review 		varchar(300),
 	Rating		varchar(4),
 	primary key (UserRevID)
@@ -62,49 +62,49 @@ CREATE TABLE UserReview(
 
 CREATE TABLE ProReview (
 	ProRevID 		varchar(5),
-	RottenTomatoes 	varchar(3), 
-	MetaCritic 		varchar(3), 
+	RottenTomatoes 	varchar(3),
+	MetaCritic 		varchar(3),
 	IMDB			varchar(3),
 	primary key (ProRevID)
-); 
+);
 
 CREATE TABLE ActedIn (
 	MovieID		varchar(5),
 	PersonID	varchar(5),
 	primary key (MovieID, PersonID),
-	foreign key (MovieID) references MovieInfo 
+	foreign key (MovieID) references MovieInfo
 		on delete set null,
-	foreign key (PersonID) references PersonInfo 
+	foreign key (PersonID) references PersonInfo
 		on delete set null
 );
 
 CREATE TABLE Directed (
-	MovieID 	varchar(5), 
+	MovieID 	varchar(5),
 	PersonID 	varchar(5),
 	primary key (MovieID, PersonID),
-	foreign key (MovieID) references MovieInfo 
+	foreign key (MovieID) references MovieInfo
 		on delete set null,
-	foreign key (PersonID) references PersonInfo 
+	foreign key (PersonID) references PersonInfo
 		on delete set null
 );
 
 CREATE TABLE FeaturedIn (
-	MovieID 	varchar(5), 
+	MovieID 	varchar(5),
 	OSTID 		varchar(5),
 	primary key (MovieID, OSTID),
-	foreign key (MovieID) references MovieInfo 
+	foreign key (MovieID) references MovieInfo
 		on delete set null,
-	foreign key (OSTID) references OST 
+	foreign key (OSTID) references OST
 		on delete set null
 );
 
 CREATE TABLE PlayedIn (
-	OSTID 		varchar(5), 
+	OSTID 		varchar(5),
 	SongID 		varchar(5),
 	primary key (OSTID, SongID),
-	foreign key (OSTID) references OST 
+	foreign key (OSTID) references OST
 		on delete set null,
-	foreign key (SongID) references Song 
+	foreign key (SongID) references Song
 		on delete set null
 );
 
@@ -112,19 +112,19 @@ CREATE TABLE ProReviewed (
 	ProRevID 	varchar(5),
 	MovieID 	varchar(5),
 	primary key (ProRevID, MovieID),
-	foreign key (ProRevID) references ProReview 
+	foreign key (ProRevID) references ProReview
 		on delete set null,
-	foreign key (MovieID) references MovieInfo 
+	foreign key (MovieID) references MovieInfo
 		on delete set null
 );
 
 CREATE TABLE UserReviewed (
-	UserRevID 	varchar(5), 
+	UserRevID 	varchar(5),
 	MovieID 	varchar(5),
 	primary key (UserRevID, MovieID),
-	foreign key (UserRevID) references UserReview 
+	foreign key (UserRevID) references UserReview
 		on delete set null,
-	foreign key (MovieID) references MovieInfo 
+	foreign key (MovieID) references MovieInfo
 		on delete set null
 );
 
