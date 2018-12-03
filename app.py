@@ -83,7 +83,7 @@ def printSQLStmt(stmt):
     print("----------------------------------")
 
 
-# FOR THE "SONG" PAGES
+# FOR THE "SONG" PAGES -- Sean
 
 @app.route('/songs/')
 def browseAllSongs():
@@ -149,7 +149,7 @@ def song_deletePlayedIn(songID,ostID):
     conn.close()
     return redirect("/songs/%s/" % str(songID))
 
-# FOR THE "OST" PAGES
+# FOR THE "OST" PAGES -- Sean
 
 @app.route('/OST/')
 def browseAllOST():
@@ -167,11 +167,8 @@ def browseOSTSingle(ostID):
     data = {"ost": getRow(ostID, "OST"), "featuredIn": featuredIn}
     return render_template('OSTSingle.html',content=data)
 
-@app.route('/people/<int:personID>/')
-def browsePersonSingle(personID):
-    pass
 
-# FOR THE "MOVIES" PAGES
+# FOR THE "MOVIES" PAGES -- Kat
 # List of All Movies
 @app.route('/movies/')
 def browseAllMovies():
@@ -244,6 +241,76 @@ def deleteMovie(movieID):
     cursor.close()
     conn.close()
     return redirect("/movies/")
+
+#for PERSON PAGES -- Makki
+
+@app.route('/Persons/')
+def browseAllPersonInfo():
+    rows = getAllRows("PersonInfo")
+    return render_template('Persons.html', content=rows)
+
+@app.route('/Persons/<int:PersonID>/')
+def browsePersonSingle(PersonID):
+    PersonInfo = getRow(PersonID, "PersonInfo")
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute("select * from Directed d, MovieInfo m where d.MovieID=m.MovieID and d.PersonID=?",str(PersonID))
+    printSQLStmt("select * from Directed d, MovieInfo m where d.MovieID=m.MovieID and d.PersonID=%s"% str(PersonID))
+    Directed = cursor.fetchall()
+    cursor.execute('select * from ActedIn a, MovieInfo m where a.MovieID=m.MovieID and a.PersonID=?',str(PersonID))
+    printSQLStmt('select * from ActedIn a, MovieInfo m where a.MovieID=m.MovieID and a.PersonID=%s'% str(PersonID))
+    ActedIn = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    data = {'PersonInfo': PersonInfo, 'Directed': Directed, 'ActedIn': ActedIn}
+    return render_template("PersonSingle.html", content=data)
+
+@app.route('/Persons/<int:PersonID>/Update/', methods=['POST'])
+def updatePerson(PersonID):
+    newName = request.form['newName']
+    newGender = request.form['newGender']
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute('update PersonInfo set Name=?, Gender=? where PersonID=?', (newName, newGender, str(PersonID)))
+    printSQLStmt('update PersonInfo set Name=%s, Gender=%s where PersonID=%s' % (newName, newGender, str(PersonID)))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect('/Persons/%s/' % str(PersonID))
+
+@app.route('/Persons/<int:PersonID>/AddDirectedMovie/')
+def directedView(PersonID):
+    data = {'PersonInfo': getRow(PersonID, 'PersonInfo'), 'MovieInfo': getAllRows('MovieInfo')}
+    return render_template('Directed.html', content=data)
+
+@app.route('/Persons/<int:PersonID>/AddDirectedMovie/<int:MovieID>/', methods=["POST"])
+def directedAdd(PersonID, MovieID):
+    conn = getConnection()
+    cursor = getCursor(conn)
+    try:
+        cursor.execute('insert into Directed values (?,?)', (str(MovieID), str(PersonID)))
+        printSQLStmt('insert into Directed values (%s,%s)' % (str(MovieID), str(PersonID)))
+    except sqlite3.IntegrityError as e:
+        cursor.close()
+        conn.close()
+        print('User has tried to input an existing entry in the table.')
+        print(e)
+        return redirect('/Persons/%s/' % str(PersonID), code=302)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect('/Persons/%s/' % str(PersonID), code=302)
+
+@app.route('/Persons/<int:PersonID>/DeleteDirectedMovie/<int:MovieID>/', methods=['POST'])
+def directedDelete(PersonID, MovieID):
+    conn = getConnection()
+    cursor = getCursor(conn)
+    cursor.execute('delete from Directed where MovieID=? and PersonID=?', (str(MovieID), str(PersonID)))
+    printSQLStmt('delete from Directed where MovieID=%s and PersonID%s' % (str(MovieID), str(PersonID)))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect('/Persons/%s/' % str(PersonID))
 
 if __name__ == '__main__':
     app.run(debug=True)

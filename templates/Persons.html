@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Person Info</h1>
+  <table class="table table-hover">
+    <thead>
+      <th>Person ID</th>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Action</th>
+    </thead>
+    <tbody href="">
+      {% for x in content %}
+        <tr>
+          <td>{{ x.PersonID }}</td>
+          <td>{{ x.Name }}</td>
+          <td>{{ x.Gender }}</td>
+          <td><button type="button" name="view" class="btn btn-link"><a href="/Persons/{{x.PersonID}}/">View!</a></button></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

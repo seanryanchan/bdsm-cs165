@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>You are now adding a Directed Movie to {{content['PersonInfo'].Name}}</h1>
+  <h1>List of Movies</h1>
+  <table class="table table-hover">
+    <thead>
+      <th>MovieID</th>
+      <th>Title</th>
+      <th>Premise</th>
+      <th>Genre</th>
+      <th>Year</th>
+      <th>Length</th>
+      <th>Action</th>
+    </thead>
+    <tbody href="">
+      {% for d in content['MovieInfo'] %}
+        <tr>
+          <td>{{d.MovieID}}</td>
+          <td>{{d.Title}}</td>
+          <td>{{d.Premise}}</td>
+          <td>{{d.Genre}}</td>
+          <td>{{d.Year}}</td>
+          <td>{{d.Length}}</td>
+          <td>
+            <form class="" action="/Persons/{{content['PersonInfo'].PersonID}}/AddDirectedMovie/{{d.MovieID}}/" method="POST">
+              <input type="submit" name="" value="Add!" class="btn btn-success">
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
