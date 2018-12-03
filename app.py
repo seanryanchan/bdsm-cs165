@@ -138,7 +138,7 @@ def song_addPlayedIn_add(songID, ostID):
     conn.close()
     return redirect("/songs/%s/" % str(songID), code=302)
 
-@app.route("/songs/<int:songID>/deleteOST/<int:ostID>", methods=["POST"])
+@app.route("/songs/<int:songID>/deleteOST/<int:ostID>/", methods=["POST"])
 def song_deletePlayedIn(songID,ostID):
     conn = getConnection()
     cursor = getCursor(conn)
