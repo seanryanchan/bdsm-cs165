@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Add a Movie to BDSM</h1>
+    <div class="editableSectionA">
+        <h4>You can add the following movie information:</h4>
+        <ul>
+            <li>Title of the Film</li>
+            <li>Premise (max. 300 characters)</li>
+            <li>Genre</li>
+            <li>Year</li>
+            <li>Length (in minutes)</li>
+        </ul>
+    </div>
+    <div class="editableSectionB">
+        <form class="" action="/movies/newMovie/submit/" method="POST">
+            <p>Title: <input style="min-width: 300px"class="control-form"type="text" name="addTitle"></p>
+            <p>Premise: <input style="min-width: 300px"class="control-form"type="text" name="addPremise"></p>
+            <p>Genre: <input style="min-width: 300px"class="control-form"type="text" name="addGenre"></p>
+            <p>Year: <input style="min-width: 300px"class="control-form"type="text" name="addYear"></p>
+            <p>Length: <input style="min-width: 300px"class="control-form"type="text" name="addLength"></p>
+            <div class="editableSectionB">
+                <button type="submit" name="submit" value="submit" class="btn btn-success">Save Changes</button>
+            </div>
+        </form>
+    </div>
+    <div class="editableSectionA">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-warning">Add a Movie</button>
+    </div>
+    <div class="editableSectionB">
+        <button onclick="toggleEdit()" type="button" name="button" class="btn btn-danger">Cancel</button>
+    </div>
+{% endblock %}
